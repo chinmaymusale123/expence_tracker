@@ -95,3 +95,6 @@ To connect to Supabase instead, set `USE_MOCK_DB=false` in `.env` after running 
 ---
 
 *Built for AIML A9 Hackathon 2024*
+
+#CONTRIBUTORS:
+- Chinmay Musale
