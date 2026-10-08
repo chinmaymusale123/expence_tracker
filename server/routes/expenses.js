@@ -6,10 +6,25 @@ const supabase = require('../config/supabase');
 
 const router = express.Router();
 
-// Multer storage for receipts
+const fs = require('fs');
+const os = require('os');
+
+// Multer storage for receipts (safe for both local and serverless/Vercel)
+const getUploadDir = () => {
+  const localDir = path.join(__dirname, '../../public/uploads');
+  try {
+    if (!fs.existsSync(localDir)) {
+      fs.mkdirSync(localDir, { recursive: true });
+    }
+    return localDir;
+  } catch (err) {
+    return os.tmpdir();
+  }
+};
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, '../../public/uploads'));
+    cb(null, getUploadDir());
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);

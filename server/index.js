@@ -8,9 +8,13 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Ensure uploads directory exists
-const uploadsDir = path.join(__dirname, '../public/uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
+try {
+  const uploadsDir = path.join(__dirname, '../public/uploads');
+  if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+  }
+} catch (e) {
+  // Read-only filesystem in serverless environments (Vercel)
 }
 
 // Middleware
@@ -45,13 +49,15 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: err.message || 'Internal server error' });
 });
 
-app.listen(PORT, () => {
-  console.log(`\n🚀 Expense Reimbursement System running at http://localhost:${PORT}`);
-  console.log(`\n📋 Demo Accounts:`);
-  console.log(`   Employee: employee@demo.com / password123`);
-  console.log(`   Manager:  manager@demo.com  / password123`);
-  console.log(`   Admin:    admin@demo.com     / password123`);
-  console.log(`\n💡 API Docs: http://localhost:${PORT}/api/health\n`);
-});
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`\n🚀 Expense Reimbursement System running at http://localhost:${PORT}`);
+    console.log(`\n📋 Demo Accounts:`);
+    console.log(`   Employee: employee@demo.com / password123`);
+    console.log(`   Manager:  manager@demo.com  / password123`);
+    console.log(`   Admin:    admin@demo.com     / password123`);
+    console.log(`\n💡 API Docs: http://localhost:${PORT}/api/health\n`);
+  });
+}
 
 module.exports = app;

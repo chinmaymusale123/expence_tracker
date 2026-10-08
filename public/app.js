@@ -104,7 +104,7 @@ async function apiRequest(endpoint, options = {}) {
     const text = await response.text();
     throw new Error(
       response.status === 404
-        ? 'Endpoint not found. Please access the application at http://localhost:3000'
+        ? 'API endpoint not found (404). If deploying on Vercel, please ensure vercel.json is deployed and environment variables are set.'
         : (text.slice(0, 120) || 'Server returned non-JSON response')
     );
   }
