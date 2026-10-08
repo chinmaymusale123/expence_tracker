@@ -2,7 +2,9 @@
    ExpenseFlow — Frontend Application
    ================================================================ */
 
-const API_BASE = '/api';
+const API_BASE = (window.location.hostname === 'localhost' && window.location.port !== '3000') || (window.location.hostname === '127.0.0.1' && window.location.port !== '3000') || window.location.protocol === 'file:'
+  ? 'http://localhost:3000/api'
+  : '/api';
 let currentUser = null;
 let authToken = null;
 let currentReviewExpenseId = null;
@@ -87,8 +89,25 @@ async function apiRequest(endpoint, options = {}) {
   const headers = { 'Content-Type': 'application/json', ...options.headers };
   if (authToken) headers['Authorization'] = `Bearer ${authToken}`;
 
-  const response = await fetch(url, { ...options, headers });
-  const data = await response.json();
+  let response;
+  try {
+    response = await fetch(url, { ...options, headers });
+  } catch (err) {
+    throw new Error('Cannot reach server. Make sure the Node server is running on http://localhost:3000');
+  }
+
+  const contentType = response.headers.get('content-type') || '';
+  let data;
+  if (contentType.includes('application/json')) {
+    data = await response.json();
+  } else {
+    const text = await response.text();
+    throw new Error(
+      response.status === 404
+        ? 'Endpoint not found. Please access the application at http://localhost:3000'
+        : (text.slice(0, 120) || 'Server returned non-JSON response')
+    );
+  }
 
   if (!response.ok) {
     throw new Error(data.error || 'Request failed');
@@ -98,12 +117,26 @@ async function apiRequest(endpoint, options = {}) {
 
 async function apiFormRequest(endpoint, formData) {
   const url = `${API_BASE}${endpoint}`;
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: { 'Authorization': `Bearer ${authToken}` },
-    body: formData
-  });
-  const data = await response.json();
+  let response;
+  try {
+    response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${authToken}` },
+      body: formData
+    });
+  } catch (err) {
+    throw new Error('Cannot reach server. Make sure the Node server is running on http://localhost:3000');
+  }
+
+  const contentType = response.headers.get('content-type') || '';
+  let data;
+  if (contentType.includes('application/json')) {
+    data = await response.json();
+  } else {
+    const text = await response.text();
+    throw new Error(text.slice(0, 120) || 'Server returned non-JSON response');
+  }
+
   if (!response.ok) throw new Error(data.error || 'Request failed');
   return data;
 }

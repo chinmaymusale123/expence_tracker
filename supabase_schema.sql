@@ -60,11 +60,11 @@ alter table public.expenses disable row level security;
 -- Pre-computed bcrypt hash of "password123"
 -- ================================================================
 insert into public.users (id, name, email, password, role, department, avatar) values
-  ('00000000-0000-0000-0000-000000000001', 'John Employee',   'employee@demo.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'employee', 'Engineering', 'JE'),
-  ('00000000-0000-0000-0000-000000000002', 'Sarah Manager',   'manager@demo.com',  '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'manager',  'Engineering', 'SM'),
-  ('00000000-0000-0000-0000-000000000003', 'Admin User',      'admin@demo.com',    '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'admin',    'HR',          'AU'),
-  ('00000000-0000-0000-0000-000000000004', 'Alice Developer', 'alice@demo.com',    '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'employee', 'Engineering', 'AD'),
-  ('00000000-0000-0000-0000-000000000005', 'Bob Marketing',   'bob@demo.com',      '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'employee', 'Marketing',   'BM');
+  ('00000000-0000-0000-0000-000000000001', 'John Employee',   'employee@demo.com', '$2a$10$L7EsnSUJ56kt5p0qqGbRmeJTuwjtDqEBVmvD7pK9hiCz7s5VDooaa', 'employee', 'Engineering', 'JE'),
+  ('00000000-0000-0000-0000-000000000002', 'Sarah Manager',   'manager@demo.com',  '$2a$10$L7EsnSUJ56kt5p0qqGbRmeJTuwjtDqEBVmvD7pK9hiCz7s5VDooaa', 'manager',  'Engineering', 'SM'),
+  ('00000000-0000-0000-0000-000000000003', 'Admin User',      'admin@demo.com',    '$2a$10$L7EsnSUJ56kt5p0qqGbRmeJTuwjtDqEBVmvD7pK9hiCz7s5VDooaa', 'admin',    'HR',          'AU'),
+  ('00000000-0000-0000-0000-000000000004', 'Alice Developer', 'alice@demo.com',    '$2a$10$L7EsnSUJ56kt5p0qqGbRmeJTuwjtDqEBVmvD7pK9hiCz7s5VDooaa', 'employee', 'Engineering', 'AD'),
+  ('00000000-0000-0000-0000-000000000005', 'Bob Marketing',   'bob@demo.com',      '$2a$10$L7EsnSUJ56kt5p0qqGbRmeJTuwjtDqEBVmvD7pK9hiCz7s5VDooaa', 'employee', 'Marketing',   'BM');
 
 -- ================================================================
 -- SEED: Demo Expenses
