@@ -13,14 +13,35 @@ const authenticate = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    const { data: user, error } = await supabase
-      .from('users')
-      .select('id, name, email, role, department, avatar')
-      .eq('id', decoded.id)
-      .single();
-    if (error || !user) {
+    let user = null;
+
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('id, name, email, role, department, avatar')
+        .eq('id', decoded.id)
+        .single();
+      if (!error && data) user = data;
+    } catch (dbErr) {
+      // Supabase unavailable
+    }
+
+    // Fallback to verified token payload
+    if (!user && decoded.id) {
+      user = {
+        id: decoded.id,
+        name: decoded.name,
+        email: decoded.email,
+        role: decoded.role,
+        department: decoded.department,
+        avatar: decoded.avatar
+      };
+    }
+
+    if (!user) {
       return res.status(401).json({ error: 'User not found' });
     }
+
     req.user = user;
     next();
   } catch (err) {
